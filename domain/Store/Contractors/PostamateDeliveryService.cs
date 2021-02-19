@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Store.Contractors
 {
@@ -39,6 +40,34 @@ namespace Store.Contractors
 
         public string Title => "Доставка через почтоматы в Украине.";
 
+        public OrderDelivery GetDelivery(Form form)
+        {
+            if (form.UniqueCode != UniqueCode || !form.IsFinal)
+                throw new InvalidOperationException("Invalid form");
+
+            var cityId = form.Fields
+                             .Single(field => field.Name == "city")
+                             .Value;
+            var cityName = cities[cityId];
+
+            var postamateId = form.Fields
+                                  .Single(field => field.Name == "postamate")
+                                  .Value;
+            var postamateName = postamates[cityId][postamateId];
+
+            var parameters = new Dictionary<string, string>
+            {
+                { nameof(cityId), cityId },
+                { nameof(cityName), cityName },
+                { nameof(postamateId), postamateId },
+                { nameof(postamateName), postamateName }
+            };
+
+            var description = $"Город: {cityName}\nПочтомат: {postamateName}";
+
+            return new OrderDelivery(UniqueCode, description, 50m, parameters);
+        }
+
         public Form CreateForm(Order order)
         {
             if (order == null)
@@ -50,7 +79,7 @@ namespace Store.Contractors
             });
         }
 
-        public Form MoveNext(int orderId, int step, IReadOnlyDictionary<string, string> values)
+        public Form MoveNextForm(int orderId, int step, IReadOnlyDictionary<string, string> values)
         {
             if (step == 1)
             {
@@ -78,7 +107,7 @@ namespace Store.Contractors
                 return new Form(UniqueCode, orderId, 3, true, new Field[]
                     {
                         new HiddenField("Город", "city", values["city"]),
-                        new SelectionField("Почтомат", "postamate", "1", postamates["postamate"])
+                        new HiddenField("Почтомат", "postamate", values["postamate"])
                     });
             } 
             else
