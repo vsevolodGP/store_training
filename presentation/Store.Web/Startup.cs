@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Store.Cashier;
 using Store.Contractors;
 using Store.Memory;
 using Store.Messages;
+using Store.Web.Contractors;
 using System;
 
 namespace Store.Web
@@ -35,6 +37,8 @@ namespace Store.Web
             services.AddSingleton<INotificationService, DebugNotificationService>();
             services.AddSingleton<IDeliveryService, PostamateDeliveryService>();
             services.AddSingleton<IPaymentService, CashPaymentService>();
+            services.AddSingleton<IPaymentService, CashierPaymentService>();
+            services.AddSingleton<IWebContractorService, CashierPaymentService>();
             services.AddSingleton<BookService>();
             
         }
@@ -66,6 +70,11 @@ namespace Store.Web
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapAreaControllerRoute(
+                    name: "cashier",
+                    areaName: "Cashier",
+                    pattern: "Cashier/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
