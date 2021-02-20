@@ -44,11 +44,16 @@ ViewData["Title"] = "Корзина";
     </tfoot>
 </table>
 
-<form action="@Url.Action("SendConfirmationCode")" method="post">
+<p>
+    Для оформления заказа необходимо подтвердить номер Вашего мобильного.
+    Введите номер и нажмите <em>Отправить код</em>. На Ваш номер будет отправлен *код подтверждения*.
+</p>
+
+<form action="@Url.Action(nameof(OrderController.SendConfirmation))" method="post">
     <input type="hidden" name="id" value="@Model.Id" />
     <div class="form-group">
         <label for="celPhone">Мобильный телефон</label>
-        <input type="text" class="form-control" name="cellPhone" value="+79876543210" />
+        <input type="text" class="form-control" name="cellPhone" placeholder="+380995683535" value="+380995683535"/>
         @if(Model.Errors.ContainsKey("cellPhone"))
         {
             <small class="form-text text-danger">@Model.Errors["cellPhone"]</small>

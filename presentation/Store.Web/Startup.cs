@@ -7,6 +7,7 @@ using Store.Cashier;
 using Store.Contractors;
 using Store.Memory;
 using Store.Messages;
+using Store.Web.App;
 using Store.Web.Contractors;
 using System;
 
@@ -25,6 +26,7 @@ namespace Store.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddHttpContextAccessor();
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
@@ -40,6 +42,7 @@ namespace Store.Web
             services.AddSingleton<IPaymentService, CashierPaymentService>();
             services.AddSingleton<IWebContractorService, CashierPaymentService>();
             services.AddSingleton<BookService>();
+            services.AddSingleton<OrderService>();
             
         }
 
@@ -68,13 +71,13 @@ namespace Store.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "areas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-                endpoints.MapAreaControllerRoute(
-                    name: "cashier",
-                    areaName: "Cashier",
-                    pattern: "Cashier/{controller=Home}/{action=Index}/{id?}");
+               
             });
         }
     }

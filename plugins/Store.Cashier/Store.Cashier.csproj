@@ -13,7 +13,6 @@
     <ProjectReference Include="..\..\domain\Store\Store.csproj" />
     <ProjectReference Include="..\..\presentation\Store.Web.Contractors\Store.Web.Contractors.csproj" />
   </ItemGroup>
-  
 
 
 </Project>
