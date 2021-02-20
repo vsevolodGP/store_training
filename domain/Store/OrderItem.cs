@@ -23,13 +23,13 @@ namespace Store
 
         public decimal Price { get; }
 
-        public OrderItem(int bookId, int count, decimal price)
+        public OrderItem(int bookId, decimal price, int count)
         {
             ThrowIfInvalidCount(count);
 
-            BookId = bookId;
-            Count = count;
+            BookId = bookId;            
             Price = price;
+            Count = count;
         }
 
         private static void ThrowIfInvalidCount(int count)
