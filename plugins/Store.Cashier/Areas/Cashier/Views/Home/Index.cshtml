@@ -1,9 +1,19 @@
-﻿@{ 
+﻿@using Store.Cashier.Areas.Cashier.Models
+@using Store.Cashier.Areas.Cashier.Controllers
+@model ExampleModel 
+
+@{ 
     ViewData["Title"] = "Платеж картой";
 }
 
 <h1>Платеж картой</h1>
 
 <p>
-    <a href="/Cashier/Home/Callback">Оплатить</a>
+    Здесь происходит эмуляция редиректа на внешнюю службу оплаты.
 </p>
+
+<form action="@Url.Action(nameof(HomeController.CallBack), "Home", new { area = "Cashier" })" method="post">
+    <input type="hidden" name="orderId" value="@Model.OrderId" />
+    <input type="hidden" name="returnUri" value="@Model.ReturnUri" />
+    <button type="submit" class="btn btn-success">Оплатить</button>
+</form>
