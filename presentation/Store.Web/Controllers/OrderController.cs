@@ -79,7 +79,10 @@ namespace Store.Web.Controllers
 
             var book = bookRepository.GetById(bookId);
 
-            order.AddOrUpdateItem(book, count);
+            if (order.Items.TryGet(bookId, out OrderItem orderItem))
+                orderItem.Count += count;
+            else
+                order.Items.Add(bookId, book.Price, count);
 
             SaveOrderAndCart(order, cart);
 
@@ -91,7 +94,7 @@ namespace Store.Web.Controllers
         {
             (Order order, Cart cart) = GetCreateOrderAndCart();
 
-            order.GetItem(bookId).Count = count;
+            order.Items.Get(bookId).Count = count;
 
             SaveOrderAndCart(order, cart);
 
@@ -103,7 +106,7 @@ namespace Store.Web.Controllers
         {
             (Order order, Cart cart) = GetCreateOrderAndCart();
 
-            order.RemoveItem(bookId);
+            order.Items.Remove(bookId);
 
             SaveOrderAndCart(order, cart);
 
