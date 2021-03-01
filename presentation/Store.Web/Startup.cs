@@ -57,7 +57,7 @@ namespace Store.Web
             //if (env.IsDevelopment())
             if (false)
             {
-                app.UseDeveloperExceptionPage();
+               app.UseDeveloperExceptionPage();
             }
             else
             {
