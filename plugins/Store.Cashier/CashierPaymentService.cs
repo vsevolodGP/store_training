@@ -3,6 +3,7 @@ using Store.Contractors;
 using Store.Web.Contractors;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Store.Cashier
 {
@@ -58,6 +59,13 @@ namespace Store.Cashier
                 builder.Port = Request.Host.Port.Value;
 
             return builder.Uri;
+        }
+
+        public Task<Uri> StartSessionAsync(IReadOnlyDictionary<string, string> options, Uri returnUri)
+        {
+            var uri = StartSession(options, returnUri);
+
+            return Task.FromResult(uri);
         }
             
     }
